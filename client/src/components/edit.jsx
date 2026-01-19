@@ -158,6 +158,21 @@ function Edit() {
         const data = await response.json();
         const product = data.product[0];
 
+        if (localStorage.getItem("user") === null) {
+          setError(`Bad request! login first to edit a product.`);
+          return;
+        } else if (
+          product.emails !=
+          JSON.parse(localStorage.getItem("user")).userDetails.email
+        ) {
+          setError(
+            `Bad request! Product doesn't belongs to user "${
+              JSON.parse(localStorage.getItem("user")).userDetails.email
+            }"`
+          );
+          return;
+        }
+
         // Set form data from fetched product
         setFormData({
           title: product.title || "",
@@ -454,8 +469,6 @@ function Edit() {
         throw new Error(errorText || "Update failed");
       }
 
-      const result = await response.json();
-
       notify("Product updated successfully!");
       navigate("/myProducts", { replace: true });
     } catch (error) {
@@ -536,7 +549,7 @@ function Edit() {
           textAlign: "center",
         }}
       >
-        <h3>Error Loading Product</h3>
+        <h3>Error Loading Product Details</h3>
         <p>{error}</p>
         <button
           onClick={() => window.location.reload()}

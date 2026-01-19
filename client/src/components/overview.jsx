@@ -35,8 +35,9 @@ const Overview = (props) => {
             </svg>
           </div>
           <div className="info-content">
-            <p className="info-label">Posting date</p>
-            <p className="info-value">{props.data[0].owner.mob}</p>
+            <p className="info-label">Mobile (*Click on No. to call)</p>
+            <a href=""><p className="info-value">{props.data[0].owner.mob} Call</p></a>
+            
           </div>
         </div>
 

@@ -3,13 +3,17 @@ import "../styles/loader.css";
 import "../styles/sell.css";
 import { ProductAgeInput } from "./howmuchold";
 import { useNavigate } from "react-router-dom";
+import TextareaList from "./textarea";
 function Sell() {
   const [loading, setloading] = useState(false);
   const [imgCount, setimgCount] = useState(0);
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [img, setImg] = useState([]);
+  const [items, setItems] = useState([]);
+  const [text, setText] = useState("");
   const navigate = useNavigate();
+
   const notify = (message) => {
     setToastMessage(message);
     setShowToast(true);
@@ -17,7 +21,6 @@ function Sell() {
   };
   const [formData, setFormData] = useState({
     title: "",
-    desc: "",
     price: "",
     cat: "Misc",
     name: "",
@@ -68,10 +71,13 @@ function Sell() {
     totalDays: 0,
   });
 
+  useEffect(() => {
+    console.log(items.toString());
+  }, [items]);
+
   // Validation errors state
   const [errors, setErrors] = useState({
     title: "",
-    desc: "",
     price: "",
     cat: "",
     name: "",
@@ -125,15 +131,7 @@ function Sell() {
         }
         break;
 
-      case "desc":
-        if (!value.trim()) {
-          error = "Description is required";
-        } else if (value.length < 10) {
-          error = "Description must be at least 10 characters";
-        } else if (value.length > 1000) {
-          error = "Description must not exceed 1000 characters";
-        }
-        break;
+        
 
       case "price":
         if (!value) {
@@ -319,6 +317,8 @@ function Sell() {
         formImg.append(key, formData[key]);
       }
 
+      formImg.append("desc", items.join(", "));
+
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/upload`,
         {
@@ -337,6 +337,18 @@ function Sell() {
       navigate("/myProducts", { replace: true });
     }
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+
+      if (text.trim()) {
+        setItems((prev) => [...prev, text.trim()]);
+        setText("");
+      }
+    }
+  };
+
 
   /* popup box */
 
@@ -498,18 +510,27 @@ function Sell() {
           <div>
             <textarea
               name="desc"
-              placeholder="Description*"
+              placeholder="Add a feature and hit enter*"
               type="text"
               className={`form-control ${
                 touched.desc && errors.desc ? "is-invalid" : ""
               } ${
                 touched.desc && !errors.desc && formData.desc ? "is-valid" : ""
               }`}
-              value={formData.desc}
-              onChange={handleInputChange}
-              onBlur={handleBlur}
+              /* value={formData.desc}
+              onChange={handleInputChange} 
+              onBlur={handleBlur}*/
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
               required
             ></textarea>
+            <ul>
+              {items.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+            {/* <TextareaList></TextareaList> */}
             {touched.desc && errors.desc && (
               <div className="invalid-feedback" style={{ display: "block" }}>
                 {errors.desc}

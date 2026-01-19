@@ -3,7 +3,7 @@ import { MoreVertical } from "lucide-react";
 import { Spinner } from "./loader";
 import "../styles/loader.css";
 import { useParams } from "react-router-dom";
-import { Heart, MapPin } from "lucide-react";
+import {  MapPin } from "lucide-react";
 
 export default function Card(props) {
   const { id } = useParams();
@@ -564,7 +564,8 @@ export default function Card(props) {
           </div>
         )}
         {filtered.map((item, i) => {
-          const firstImg = item.images;
+          const firstImg = item.images?.[0] || null;
+
           return (
             <a
               href={`/products/${item._id}`}
@@ -625,7 +626,13 @@ export default function Card(props) {
                     className="product-image-mobile"
                   >
                     <img
-                      src={`data:${firstImg[0].type};base64,${firstImg[0].data}`}
+                      src={
+                        firstImg
+                          ? `${import.meta.env.VITE_SERVER_URL}/uploads/${
+                              firstImg.filename
+                            }`
+                          : "/placeholder.png"
+                      }
                       alt={item.title}
                       style={{
                         width: "100%",
@@ -633,9 +640,6 @@ export default function Card(props) {
                         objectFit: "cover",
                       }}
                     />
-                    <button style={styles.favoriteBtn} className="favorite-btn">
-                      <Heart size={20} color="#EF4444" />
-                    </button>
                   </div>
                   <div
                     style={styles.productInfo}

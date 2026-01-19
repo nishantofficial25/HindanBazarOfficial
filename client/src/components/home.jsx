@@ -1,23 +1,28 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import {
   ChevronRight,
-  Heart,
-  Star,
-
   // CATEGORY ICONS
   Timer,
   Smartphone,
   Shirt,
-  Laptop,
   Sofa,
   Tv,
-  Plane,
-  Brush,
-  ShoppingBag,
   Bike
 } from "lucide-react";
 
 export default function Home() {
+
+  const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const mq = window.matchMedia("(max-width: 768px)");
+      const handleChange = (e) => setIsMobile(e.matches);
+  
+      setIsMobile(mq.matches);
+      mq.addEventListener("change", handleChange);
+      return () => mq.removeEventListener("change", handleChange);
+    }, []);
+
   const styles = {
     heroSection: {
       background: "linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)",
@@ -219,6 +224,7 @@ export default function Home() {
   .category-icon {
     margin-bottom: 6px;
   }
+    
       `}</style>
 
       {/* Hero Section */}
@@ -234,7 +240,7 @@ export default function Home() {
             >
               <div style={styles.ctaItem}>
                 <span>🛒</span>
-                <span>Buy Here</span>
+                <span>Buy</span>
                 <ChevronRight size={20} />
               </div>
             </a>
@@ -245,7 +251,18 @@ export default function Home() {
             >
               <div style={styles.ctaItem}>
                 <span>🪙</span>
-                <span>Sell Here</span>
+                <span>Sell</span>
+                <ChevronRight size={20} />
+              </div>
+            </a>
+            {!isMobile && <label className="orlabel">Or</label>}
+            <a
+              href={`${import.meta.env.VITE_CLIENT_URL}/restaurants`}
+              style={{ color: "black" }}
+            >
+              <div style={styles.ctaItem}>
+                <span>🍟</span>
+                <span>Eat</span>
                 <ChevronRight size={20} />
               </div>
             </a>

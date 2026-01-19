@@ -1,24 +1,31 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 import "./app.css";
 import Navbar from "./components/navbar";
 import Home from "./components/home";
 import Products from "./components/products";
 import Sell from "./components/sell";
 import Show from "./components/show";
-import Cards from "./components/cards";
-import Category from "./components/category";
 import LoginForm from "./components/loginForm";
 import Profile from "./components/profile.jsx";
 import AccountDashboard from "./components/dashboard.jsx";
 import Myproducts from "./components/myProducts.jsx";
 import Footer from "./components/footer.jsx";
 import Edit from "./components/edit.jsx";
+import RestaurantsList from "./restaurant/restaurants.jsx";
+import HindanVegMenu from "./restaurant/one.jsx";
+import Urban from "./restaurant/urban.jsx";
+import AadhaarAuthScreen from "./test.jsx";
 
 function App() {
-  const { id } = useParams();
   const [user, setUser] = useState(false);
   const [search, setsearch] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
@@ -26,58 +33,58 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(search);
-  }, [search]);
+  // paths where navbar/footer should be hidden
+  const hideLayoutOn = ["/restaurants","/urban","/aa"];
 
-  const handleScroll = (e) => {
-    console.log("scroll");
-  };
+  const hideLayout = hideLayoutOn.some((path) =>
+    location.pathname.startsWith(path)
+  );
 
   return (
     <>
-      <BrowserRouter>
-        {/* Always visible */}
-        <Navbar setsearch={setsearch} />
+      {!hideLayout && <Navbar setsearch={setsearch} />}
 
-        {/* If search has value → force show Products */}
-        {search ? (
-          <Products search={search} />
-        ) : (
-          <Routes>
-            <Route path="/" element={<Home />} />
+      {/* If search has value → force show Products */}
+      {search ? (
+        <Products search={search} />
+      ) : (
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/aa" element={<AadhaarAuthScreen></AadhaarAuthScreen>} />
+          <Route
+            path="/restaurants"
+            element={<RestaurantsList></RestaurantsList>}
+          />
+          <Route
+            path="/restaurants/:id"
+            element={<HindanVegMenu></HindanVegMenu>}
+          />
 
-            <Route path="/products" element={<Products search={search} />} />
+          <Route path="/urban" element={<Urban></Urban>} />
 
-            <Route
-              path="/myProducts"
-              element={<Myproducts search={search} myProd={true} />}
-            />
+          <Route path="/products" element={<Products search={search} />} />
 
-            <Route path="/sell" element={!user ? <LoginForm /> : <Sell />} />
+          <Route
+            path="/myProducts"
+            element={<Myproducts search={search} myProd={true} />}
+          />
 
-            <Route path="/products/:id" element={<Show />} />
+          <Route path="/sell" element={!user ? <LoginForm /> : <Sell />} />
 
-            <Route path="/edit-product/:id" element={<Edit />} />
+          <Route path="/products/:id" element={<Show />} />
 
-            <Route
-              path="/category/:id"
-              element={<Products search={search} />}
-            />
+          <Route path="/edit-product/:id" element={<Edit />} />
 
-            <Route path="/account" element={<AccountDashboard />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<LoginForm />} />
-          </Routes>
-        )}
-      </BrowserRouter>
+          <Route path="/category/:id" element={<Products search={search} />} />
 
-      <Footer />
+          <Route path="/account" element={<AccountDashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<LoginForm />} />
+        </Routes>
+      )}
+      {!hideLayout && <Footer />}
     </>
   );
 }
 
 export default App;
-{
-  /*  */
-}

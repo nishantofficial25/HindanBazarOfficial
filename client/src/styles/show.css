@@ -74,6 +74,36 @@
   padding: 0 20px;
 }
 
+.fade-image {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.thumbnail {
+  cursor: pointer;
+  display: inline-block;
+  padding: 4px;
+}
+
+.thumbnail.active {
+  border: 2px solid #007bff;
+  border-radius: 6px;
+}
+
+.thumb-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+
 .share-btn {
   display: inline-flex;
   align-items: center;
@@ -344,6 +374,59 @@
 .features-wrapper {
   position: relative;
 }
+
+/* ===============================
+   DESKTOP LENS ZOOM
+================================ */
+.zoom-wrapper {
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.zoom-base-image {
+  width: 100%;
+  display: block;
+}
+
+/* Lens */
+.zoom-lens {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-size: 200%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+/* Enable lens ONLY on desktop */
+@media (hover: hover) and (pointer: fine) {
+  .zoom-lens {
+    opacity: 1;
+  }
+}
+
+/* ===============================
+   FULLSCREEN IMAGE MODAL
+================================ */
+.image-modal {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  touch-action: pan-x pan-y;
+}
+
 
 /* Responsive Styles  */
 @media (max-width: 1024px) {

@@ -1,22 +1,12 @@
 import React, { useState } from "react";
 import Cards from "./cards";
 import {
-  Search,
-  ShoppingCart,
-  User,
-  Menu,
   X,
   SlidersHorizontal,
   ArrowUpDown,
-  Heart,
-  Star,
-  MapPin,
-  ChevronDown,
 } from "lucide-react";
 
 export default function ProductsPage(props) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showMobileSort, setShowMobileSort] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -599,169 +589,6 @@ export default function ProductsPage(props) {
 
             <Cards search={props.search} ></Cards>
 
-            {/* <div
-              style={styles.productsGrid}
-              className="products-grid-responsive"
-            >
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  style={styles.productCard}
-                  className="product-card"
-                >
-                  <div
-                    style={{
-                      ...styles.productImage,
-                      backgroundColor: product.color,
-                    }}
-                    className="product-image-mobile"
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "white",
-                        fontSize: "64px",
-                        fontWeight: "700",
-                      }}
-                    >
-                      {product.title.charAt(0)}
-                    </div>
-                    <button style={styles.favoriteBtn} className="favorite-btn">
-                      <Heart size={20} color="#EF4444" />
-                    </button>
-                  </div>
-                  <div
-                    style={styles.productInfo}
-                    className="product-info-mobile"
-                  >
-                    <div>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "flex-start",
-                          gap: "12px",
-                        }}
-                      >
-                        <div style={{ flex: 1 }}>
-                          <h3
-                            style={styles.productTitle}
-                            className="product-title-mobile"
-                          >
-                            {product.title}
-                          </h3>
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "8px",
-                              marginBottom: "12px",
-                            }}
-                            className="product-rating-mobile"
-                          >
-                            <span
-                              style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "4px",
-                                backgroundColor: "#10B981",
-                                color: "white",
-                                padding: "4px 8px",
-                                borderRadius: "6px",
-                                fontSize: "13px",
-                                fontWeight: 600,
-                              }}
-                            >
-                              {product.rating} ★
-                            </span>
-                            <span
-                              style={{ fontSize: "13px", color: "#6B7280" }}
-                            >
-                              {product.reviews}
-                            </span>
-                          </div>
-                        </div>
-                        <div style={{ textAlign: "right" }}>
-                          <div
-                            style={styles.productPrice}
-                            className="product-price-mobile"
-                          >
-                            {product.price}
-                          </div>
-                          <div
-                            style={{
-                              fontSize: "14px",
-                              color: "#6B7280",
-                              textDecoration: "line-through",
-                              marginBottom: "4px",
-                            }}
-                            className="product-original-price"
-                          >
-                            {product.originalPrice}
-                          </div>
-                          <div
-                            style={{
-                              fontSize: "13px",
-                              color: "#10B981",
-                              fontWeight: 600,
-                            }}
-                          >
-                            {product.discount}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        style={styles.productSpecs}
-                        className="product-specs"
-                      >
-                        {product.specs.map((spec, index) => (
-                          <div key={index} style={styles.specItem}>
-                            <div style={styles.specBullet}></div>
-                            <span>{spec}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div
-                        style={styles.productMeta}
-                        className="product-meta-mobile"
-                      >
-                        <div style={styles.productLocation}>
-                          <MapPin size={16} />
-                          <span>{product.location}</span>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                        >
-                          <Star size={16} color="#F59E0B" fill="#F59E0B" />
-                          <span style={{ fontWeight: 600 }}>
-                            {product.rating}
-                          </span>
-                        </div>
-                      </div>
-                      <label
-                        style={styles.compareCheckbox}
-                        className="compare-checkbox"
-                      >
-                        <input type="checkbox" style={styles.checkbox} />
-                        <span>Add to Compare</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div> */}
           </div>
         </div>
       </div>

@@ -1,0 +1,385 @@
+import React, { useState } from "react";
+import { Search, MapPin, Star, Phone, Clock } from "lucide-react";
+import { menuData } from "../MenuData/menu";
+import { restaurants } from "../MenuData/restaurantslist";
+import "./styles/restaurants.css";
+
+const RestaurantsList = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const getFilteredRestaurants = () => {
+    if (searchQuery.trim() === "") {
+      return restaurants;
+    }
+    return restaurants.filter(
+      (restaurant) =>
+        restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        restaurant.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        restaurant.cuisine.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  const openmenu = (id)=>{
+    window.location.href = `/restaurants/${id}`;
+  }
+
+  return (
+    <div className="restaurants-page">
+      {/* Header */}
+      <header className="restaurants-header">
+        <div className="header-content">
+          <div className="header-left">
+            <div className="logo-icon">🍽️</div>
+            <div>
+              <h1 className="page-title">Hindan Eats!</h1>
+              <p className="page-tagline">
+                Find the best dining experience near you
+              </p>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="header-search">
+            <div className="search-box">
+              <Search className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search by name, location, or cuisine..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="clear-btn"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="header-right">
+            <div className="header-stats">
+              <div className="stat-item">
+                <span className="stat-number">{restaurants.length}</span>
+                <span className="stat-label">Restaurants</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Restaurants Grid */}
+      <div className="restaurants-container">
+        {getFilteredRestaurants().length > 0 ? (
+          <div className="restaurants-grid">
+            {getFilteredRestaurants().map((restaurant) => (
+              <div
+                key={restaurant.id}
+                className="restaurant-card"
+                onClick={() => openmenu(restaurant.id)}
+              >
+                <div className="card-image-wrapper">
+                  <img
+                    src={restaurant.image}
+                    alt={restaurant.name}
+                    className="card-image"
+                  />
+                  <div className="rating-badge">
+                    <Star className="star-icon" />
+                    <span>{restaurant.rating}</span>
+                  </div>
+                </div>
+
+                <div className="card-content">
+                  <h3 className="restaurant-name">{restaurant.name}</h3>
+
+                  <div className="restaurant-info">
+                    <div className="info-item">
+                      <MapPin className="info-icon" />
+                      <span>{restaurant.location}</span>
+                    </div>
+
+                    <div className="info-item">
+                      <span className="cuisine-tag">{restaurant.cuisine}</span>
+                    </div>
+
+                    <div className="info-item">
+                      <Phone className="info-icon" />
+                      <span>{restaurant.phone}</span>
+                    </div>
+
+                    <div className="info-item">
+                      <Clock className="info-icon" />
+                      <span>{restaurant.openTime}</span>
+                    </div>
+                  </div>
+
+                  <button className="view-menu-btn">View Menu</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-results">
+            <p className="no-results-text">
+              No restaurants found matching "{searchQuery}"
+            </p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="reset-search-btn"
+            >
+              Clear Search
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <footer className="restaurants-footer">
+        <div className="footer-content">
+          <p className="footer-heading">Partner with us</p>
+          <p className="footer-text">
+            We help restaurants reach more customers and grow their business
+          </p>
+          <div className="footer-contact">
+            <Phone className="footer-phone-icon" />
+            <div className="footer-phone-numbers">
+              +91-965-095-0278 | +91-965-095-0261
+            </div>
+          </div>
+          <p className="footer-tagline">
+            Quality food at affordable prices for everyone
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default RestaurantsList;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState } from "react";
+import { ChefHat, Phone, Search, MapPin, Star } from "lucide-react";
+import { menuData } from "../MenuData/menu";
+import { restaurants } from "../MenuData/restaurantslist";
+import "./styles/restaurants.css";
+
+const RestaurantsList = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter logic
+  const getFilteredContent = () => {
+    // 1️⃣ No search → show restaurants
+    if (searchQuery.trim() === "") {
+      return { type: "restaurants", data: restaurants };
+    }
+
+    // 2️⃣ Flatten menuData into single array
+    const allDishes = Object.entries(menuData).flatMap(([category, items]) =>
+      items.map((item) => ({
+        ...item,
+        category,
+      }))
+    );
+
+    // 3️⃣ Filter dishes by name
+    const filteredDishes = allDishes.filter((dish) =>
+      dish.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    return {
+      type: "dishes",
+      data: filteredDishes,
+    };
+  };
+
+  const filteredContent = getFilteredContent();
+
+  return (
+    <div className="restaurants-page">
+      {/* Header */}
+      <header className="page-header">
+        <div className="header-content">
+          <div className="header-left">
+            <ChefHat className="chef-icon" />
+            <div>
+              <h1 className="page-title">Food Directory</h1>
+              <p className="page-tagline">
+                Discover the best restaurants near you
+              </p>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="header-search">
+            <div className="search-box">
+              <Search className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search restaurants or dishes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="clear-btn"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="header-right">
+            <div className="header-badge">
+              {filteredContent.type === "restaurants"
+                ? restaurants.length
+                : filteredContent.data.length}{" "}
+              {filteredContent.type === "restaurants"
+                ? "Restaurants"
+                : "Dishes"}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="main-content">
+        <div className="content-container">
+          {/* Results Header */}
+          <div className="results-header">
+            <h2 className="results-title">
+              {filteredContent.type === "restaurants"
+                ? "All Restaurants"
+                : `Search Results for "${searchQuery}"`}
+            </h2>
+            <p className="results-count">
+              Showing {filteredContent.data.length}{" "}
+              {filteredContent.type === "restaurants"
+                ? "restaurants"
+                : "dishes"}
+            </p>
+          </div>
+
+          {/* Content Grid */}
+          {filteredContent.data.length > 0 ? (
+            <div className="content-grid">
+              {filteredContent.type === "restaurants"
+                ? // Restaurant Cards
+                  filteredContent.data.map((restaurant) => (
+                    <div key={restaurant.id} className="restaurant-card">
+                      <div className="card-image-container">
+                        <img
+                          src={restaurant.image}
+                          alt={restaurant.name}
+                          className="card-image"
+                        />
+                        <div className="rating-badge">
+                          <Star className="star-icon" />
+                          {restaurant.rating}
+                        </div>
+                      </div>
+                      <div className="card-content">
+                        <h3 className="card-title">{restaurant.name}</h3>
+                        <div className="card-location">
+                          <MapPin className="location-icon" />
+                          <span>{restaurant.location}</span>
+                        </div>
+                        <div className="card-actions">
+                          <a
+                            href={`tel:${restaurant.phone}`}
+                            className="call-button"
+                          >
+                            <Phone className="phone-icon" />
+                            Call Now
+                          </a>
+                          <button className="view-menu-button">
+                            View Menu
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                : // Dish Cards
+                  filteredContent.data.map((dish, index) => (
+                    <div key={index} className="dish-card">
+                      <div className="dish-image-container">
+                        <img
+                          src={dish.image}
+                          alt={dish.name}
+                          className="dish-image"
+                        />
+                        <div className="price-badge">
+                          ₹{Object.values(dish.quantity || {})[0]}
+                        </div>
+                      </div>
+
+                      <div className="dish-content">
+                        <h3 className="dish-title">{dish.name}</h3>
+
+                        <div className="dish-restaurant">
+                          <ChefHat className="mini-chef-icon" />
+                          <span>
+                            {
+                              restaurants.find(
+                                (r) => r.id === dish.RestaurantsListid
+                              )?.name
+                            }
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+            </div>
+          ) : (
+            <div className="no-results">
+              <div className="no-results-icon">🔍</div>
+              <p className="no-results-text">
+                No dishes found matching "{searchQuery}"
+              </p>
+              <button
+                onClick={() => setSearchQuery("")}
+                className="reset-button"
+              >
+                Clear Search
+              </button>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="page-footer">
+        <div className="footer-content">
+          <p className="footer-text">
+            Quality food at cheapest rates • Serving with love and care
+          </p>
+          <p className="footer-copyright">
+            © 2024 Food Directory. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default RestaurantsList;
